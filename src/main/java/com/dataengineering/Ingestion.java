@@ -31,9 +31,9 @@ public class Ingestion {
         SparkSession spark = InitiateSpark();
         ExternalCatalog externalCatalog = spark.sharedState().externalCatalog();
 
-        Dataset<Row> mysql_data = getMySqlData(spark);
-        mysql_data.printSchema();
-        mysql_data.show();
+        Dataset<Row> test_data = readData(spark);
+        test_data.printSchema();
+        test_data.show();
 
         String database = args[0];
         String tablename = args[1];
@@ -41,14 +41,14 @@ public class Ingestion {
         logger.info("HDFS location is : "+tableLocation);
     }
 
-    private static Dataset<Row> getMySqlData(SparkSession spark) {
+    private static Dataset<Row> readData(SparkSession spark) {
         logger.info("Loading data from CSV");
-        Dataset<Row> mysql_data = spark.read()
+        Dataset<Row> test_data = spark.read()
                 .option("header", "true")
                 .option("delimiter", ",")
                 .csv("hdfs://quickstart.cloudera:8020/user/cloudera/data/test_data.csv");
         logger.info("sending back csv data");
-        return mysql_data;
+        return test_data;
     }
 
     private static List<String> ExtractColumns(Dataset<Row> mysql_data){
